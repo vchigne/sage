@@ -1,0 +1,28 @@
+catalog:
+  name: "Inventario"
+  description: "Registro de inventario de productos."
+  fields:
+    - name: "product_id"
+      type: "text"
+      length: 15
+      required: true
+      unique: true
+      validation_expression: "df['product_id'].notnull()"
+    - name: "product_name"
+      type: "text"
+      length: 100
+      required: true
+    - name: "stock_quantity"
+      type: "number"
+      length: 10
+      decimals: 0
+      required: true
+      validation_expression: "df['stock_quantity'] >= 0"
+  row_validation:
+    validation_expression: "df['stock_quantity'] >= 0"
+    description: "Cada producto debe tener una cantidad de stock mayor o igual a 0."
+  catalog_validation:
+    validation_expression: "df['product_id'].nunique() == df.shape[0]"
+    description: "No debe haber productos duplicados en el inventario."
+  file_format:
+    filename_pattern: "{sender_id}-{date}-INVENTORY_DATA.csv"

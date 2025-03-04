@@ -1,0 +1,39 @@
+package:
+  name: "Paquete de Inventario"
+  description: "Datos de inventario enviados por distribuidores."
+  mandatory: true
+
+  methods:
+    file_format:
+      type: "CSV"
+      filename_pattern: "{sender_id}-{date}-INVENTORY_PACKAGE.csv"
+
+  catalogs:
+    - path: "catalogs/inventario.yaml"
+
+  package_validation:
+    validation_rules:
+      - name: "Producto debe existir en la base de productos"
+        validation_expression: "df['inventario']['producto_id'].isin(df['productos']['producto_id'])"
+      - name: "Stock no puede ser negativo"
+        validation_expression: "df['inventario']['stock'] >= 0"
+
+  destination:
+    enabled: true
+    database_connection:
+      type: "mysql"
+      host: "db.empresa.com"
+      port: 3306
+      username: "inventory_user"
+      password: "secure_password"
+      database: "inventory_data"
+    target_table: "inventory_records"
+    
+    pre_validation:
+      endpoint: "https://api.empresa.com/v1/validate_inventory"
+      method: "POST"
+      payload:
+        table: "temp_inventory"
+        checks: ["validate_stock", "check_duplicates"]
+    
+    insertion_method: "insert"
