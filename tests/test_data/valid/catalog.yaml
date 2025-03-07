@@ -1,0 +1,47 @@
+catalog:
+  name: "Catálogo de Productos"
+  description: "Definición de campos para datos de productos"
+  fields:
+    - name: "product_id"
+      type: "text"
+      length: 20
+      required: true
+      unique: true
+      validation_expression: "df['product_id'].notnull()"
+    
+    - name: "product_name"
+      type: "text"
+      length: 100
+      required: true
+      validation_expression: "df['product_name'].notnull()"
+    
+    - name: "price"
+      type: "number"
+      length: 10
+      decimals: 2
+      required: true
+      validation_expression: "df['price'] > 0"
+    
+    - name: "category"
+      type: "text"
+      length: 50
+      required: true
+      validation_expression: "df['category'].isin(['Electronics', 'Food', 'Clothing'])"
+    
+    - name: "stock"
+      type: "number"
+      length: 6
+      decimals: 0
+      required: true
+      validation_expression: "df['stock'] >= 0"
+
+  row_validation:
+    validation_expression: "df['price'] > 0 & df['stock'] >= 0"
+    description: "Validaciones a nivel de fila para precios y stock"
+
+  catalog_validation:
+    validation_expression: "df.shape[0] > 0 & df['product_id'].nunique() == df.shape[0]"
+    description: "Validaciones globales para el catálogo"
+
+  file_format:
+    filename_pattern: "{sender_id}-{date}-PRODUCTS.csv"

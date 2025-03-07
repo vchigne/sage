@@ -1,0 +1,28 @@
+senders:
+  # Missing corporate_owner
+
+  data_receivers:
+    - name: "Invalid Hub"
+      # Missing required email
+      sftp_directory: 123  # Should be string
+
+  senders_list:
+    - sender_id: "INVALID001"
+      # Missing name
+      responsible_person:
+        name: "Invalid Contact"
+        # Missing email and phone
+
+      submission_frequency:
+        type: "invalid"  # Invalid frequency type
+        deadline:
+          if_daily:
+            time: "25:00"  # Invalid time
+
+      allowed_methods: ["invalid_method"]  # Invalid method
+
+      # Missing configurations section
+
+      packages:
+        - name: "Invalid Package"
+          # Missing path

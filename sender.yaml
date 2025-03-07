@@ -1,0 +1,47 @@
+senders:
+  corporate_owner: "Global Corp"
+  data_receivers:
+    - name: "Central Data Hub"
+      email: "datahub@globalcorp.com"
+      sftp_directory: "/corporate/datahub/"
+      api_endpoint: "https://api.globalcorp.com/v1/upload_package"
+
+  senders_list:
+    - sender_id: "DIST001"
+      name: "Distribuidor Uno"
+      responsible_person:
+        name: "Alice Johnson"
+        email: "alice.johnson@dist1.com"
+        phone: "+1-555-111-2222"
+
+      submission_frequency:
+        type: "monthly"  # Opciones: daily, weekly, monthly
+        deadline:
+          if_monthly:
+            day: 5
+            time: "23:59"
+          if_weekly:
+            day_of_week: "Monday"
+            time: "12:00"
+
+      allowed_methods: ["sftp", "email", "api"]
+
+      configurations:
+        sftp:
+          host: "sftp.dist1.com"
+          port: 22
+          username: "dist1_user"
+          password: "secure_password"
+          directory: "/outgoing/sales_package/"
+        email:
+          allowed_senders: ["sales@dist1.com"]
+          receiving_email: "sales-packages@globalcorp.com"
+          subject_format: "Sales Package Submission - {date}"
+        api:
+          endpoint: "https://api.dist1.com/upload"
+          api_key: "API_SECRET_KEY"
+          method: "POST"
+
+      packages:
+        - name: "Paquete de Ventas"
+          path: "packages/sales_package.yaml"

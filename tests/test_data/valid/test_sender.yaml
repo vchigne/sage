@@ -1,0 +1,35 @@
+senders:
+  corporate_owner: "Distribuidora XYZ"
+  data_receivers:
+    - name: "Centro de Datos Principal"
+      email: "datos@xyz.com"
+      sftp_directory: "/incoming/ventas/"
+      api_endpoint: "https://api.xyz.com/upload"
+
+  senders_list:
+    - sender_id: "ALC001"
+      name: "Sucursal Central"
+      responsible_person:
+        name: "Juan Pérez"
+        email: "jperez@xyz.com"
+        phone: "+51-999-888-777"
+
+      submission_frequency:
+        type: "daily"
+        deadline:
+          if_daily:
+            time: "23:59"
+
+      allowed_methods: ["sftp"]
+
+      configurations:
+        sftp:
+          host: "sftp.xyz.com"
+          port: 22
+          username: "suc001"
+          password: "pass123"
+          directory: "/outgoing/ventas/"
+
+      packages:
+        - name: "Reporte Diario"
+          path: "test_package.yaml"

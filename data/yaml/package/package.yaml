@@ -1,0 +1,26 @@
+package:
+  name: "Reporte Diario"
+  description: "Paquete con datos diarios de productos"
+  mandatory: true
+
+  methods:
+    file_format:
+      type: "ZIP"
+      filename_pattern: "{sender_id}-{date}-PAQUETE_SIMPLE.zip"
+
+  catalogs:
+    - name: "Productos"
+      path: "productos.yaml"
+      validation_rules:
+        - name: "Verificar productos activos"
+          validation_expression: "df[df['estado'] == 'Activo'].shape[0] >= 1"
+        - name: "Verificar precios"
+          validation_expression: "df['precio_lista'].min() > 0"
+
+  destination:
+    enabled: true
+    database_connection:
+      type: "postgresql"
+      environment: "test"
+    target_table: "productos_consolidados"
+    insertion_method: "insert"

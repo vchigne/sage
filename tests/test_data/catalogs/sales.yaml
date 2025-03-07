@@ -1,0 +1,29 @@
+catalog:
+  name: "Sales Data"
+  description: "Daily sales transactions"
+  fields:
+    - name: "transaction_id"
+      type: "text"
+      required: true
+      unique: true
+      validation_expression: "df['transaction_id'].notnull()"
+    - name: "customer_id"
+      type: "text"
+      required: true
+      validation_expression: "df['customer_id'].notnull()"
+    - name: "amount"
+      type: "number"
+      required: true
+      validation_expression: "df['amount'] > 0"
+    - name: "date"
+      type: "date"
+      required: true
+      validation_expression: "pd.to_datetime(df['date'], errors='coerce').notnull().all()"
+
+  row_validation:
+    validation_expression: "df['amount'] <= 10000"
+    description: "Individual transaction amount must not exceed 10000"
+
+  catalog_validation:
+    validation_expression: "df.shape[0] >= 1 & df.duplicated(subset=['transaction_id']).sum() == 0"
+    description: "Must have at least one record and no duplicate transactions"

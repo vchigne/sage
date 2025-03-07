@@ -1,0 +1,28 @@
+package:
+  name: "Maestro de Productos Oficial"
+  description: "Paquete con el catálogo oficial de productos actualizado"
+  mandatory: true
+
+  methods:
+    file_format:
+      type: "XLSX"
+      filename_pattern: "{sender_id}-{date}-PRODUCTOS.xlsx"
+
+  catalogs:
+    - name: "Productos"
+      path: "catalogs/productos.yaml"
+
+  package_validation:
+    validation_rules:
+      - name: "Verificar Productos Activos"
+        validation_expression: "df[df['estado'] == 'Activo'].shape[0] > 0"
+      - name: "Verificar Precios"
+        validation_expression: "df['precio_lista'].min() > 0"
+
+  destination:
+    enabled: true
+    database_connection:
+      type: "postgresql"
+      environment: "dev"
+    target_table: "maestro_productos"
+    insertion_method: "replace"

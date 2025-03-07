@@ -1,0 +1,14 @@
+catalog:
+  name: "Catálogo Inválido - Tipos Incorrectos"
+  description: "Catálogo con tipos de datos inválidos"
+  fields:
+    - name: "id"
+      type: "invalid_type"  # Invalid type
+      length: "not_a_number"  # Invalid length
+      required: "yes"  # Should be boolean
+      validation_expression: 123  # Should be string
+
+    - name: "price"
+      type: "number"
+      decimals: "two"  # Invalid decimal specification
+      required: true

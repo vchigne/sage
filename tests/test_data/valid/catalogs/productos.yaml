@@ -1,0 +1,52 @@
+catalog:
+  name: "Maestro de Productos"
+  description: "Catálogo oficial de productos con precios y categorías"
+  fields:
+    - name: "codigo_producto"
+      type: "text"
+      length: 15
+      required: true
+      unique: true
+      validation_expression: "df['codigo_producto'].notnull()"
+
+    - name: "nombre_producto"
+      type: "text"
+      length: 100
+      required: true
+      validation_expression: "df['nombre_producto'].notnull()"
+
+    - name: "categoria"
+      type: "text"
+      length: 50
+      required: true
+      validation_expression: "df['categoria'].isin(['Alimentos', 'Bebidas', 'Limpieza', 'Cuidado Personal'])"
+
+    - name: "precio_lista"
+      type: "number"
+      length: 10
+      decimals: 2
+      required: true
+      validation_expression: "df['precio_lista'] > 0"
+
+    - name: "unidad_medida"
+      type: "text"
+      length: 10
+      required: true
+      validation_expression: "df['unidad_medida'].isin(['UND', 'KG', 'LT', 'PAQ'])"
+
+    - name: "estado"
+      type: "text"
+      length: 20
+      required: true
+      validation_expression: "df['estado'].isin(['Activo', 'Descontinuado', 'Proximamente'])"
+
+  row_validation:
+    validation_expression: "(df['precio_lista'] > 0) & (df['estado'].notnull())"
+    description: "Validaciones a nivel de fila para precio y estado"
+
+  catalog_validation:
+    validation_expression: "(df.shape[0] > 0) and (df['codigo_producto'].nunique() == df.shape[0])"
+    description: "Verificar que haya registros y no haya duplicados"
+
+  file_format:
+    filename_pattern: "{sender_id}-{date}-PRODUCTOS.xlsx"

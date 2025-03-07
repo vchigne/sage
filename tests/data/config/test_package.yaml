@@ -1,0 +1,37 @@
+package:
+  name: "Paquete de Prueba"
+  organization_name: "Empresa Test"
+  country_name: "Perú"
+  country_code: "PE"
+  product_name: "Producto Test"
+  product_code: "PT"
+  installation: "Instalación Test"
+  type: "package"
+  version: "1.0"
+
+  methods:
+    file_format:
+      type: "CSV"
+      filename_pattern: "{sender_id}-{date}-SALES_PACKAGE.csv"
+
+  catalogs:
+    - path: "ventas.yaml"
+
+  validation_rules:
+    - field: "codigo"
+      type: "string"
+      required: true
+      max_length: 20
+    - field: "descripcion"
+      type: "string"
+      required: true
+      max_length: 100
+    - field: "cantidad"
+      type: "number"
+      required: true
+      min: 0
+    - field: "precio"
+      type: "decimal"
+      required: true
+      min: 0
+      decimal_places: 2

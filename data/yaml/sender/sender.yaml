@@ -1,0 +1,23 @@
+senders:
+  description: "Configuración de emisores autorizados"
+  senders_list:
+    - id: "ALC001"
+      name: "Distribuidor Principal"
+      description: "Distribuidor autorizado para envío de reportes diarios"
+      status: "active"
+      packages:
+        - name: "Reporte Diario"
+          enabled: true
+          version: "1.0"
+      
+      submission_frequency:
+        type: "monthly"
+        deadline:
+          if_monthly:
+            day: 5
+            time: "18:00"
+          if_weekly:
+            day_of_week: "Friday"
+            time: "18:00"
+          if_daily:
+            time: "18:00"

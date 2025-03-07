@@ -1,0 +1,59 @@
+catalog:
+  name: "Productos"
+  description: "Catálogo de productos y sus características"
+  file_format:
+    filename_pattern: "{sender_id}-{date}-PRODUCTOS.csv"
+  fields:
+    - name: "codigo_producto"
+      type: "text"
+      length: 10
+      required: true
+      unique: true
+      validation_expression: "df['codigo_producto'].notnull().all()"
+      severity: "ERROR"
+      message: "El código de producto es obligatorio y debe ser único"
+
+    - name: "nombre_producto"
+      type: "text"
+      length: 100
+      required: true
+      validation_expression: "df['nombre_producto'].notnull().all()"
+      severity: "ERROR"
+      message: "El nombre del producto es obligatorio"
+
+    - name: "categoria"
+      type: "text"
+      length: 50
+      required: true
+      validation_expression: "df['categoria'].isin(['Alimentos', 'Bebidas', 'Limpieza', 'Cuidado Personal']).all()"
+      severity: "ERROR"
+      message: "La categoría debe ser una de las siguientes: Alimentos, Bebidas, Limpieza, Cuidado Personal"
+
+    - name: "precio_lista"
+      type: "number"
+      length: 10
+      decimals: 2
+      required: true
+      validation_expression: "(df['precio_lista'] > 0).all()"
+      severity: "ERROR"
+      message: "El precio debe ser un número positivo mayor a cero"
+
+    - name: "estado"
+      type: "text"
+      length: 20
+      required: true
+      validation_expression: "df['estado'].isin(['Activo', 'Descontinuado', 'Proximamente']).all()"
+      severity: "WARNING"
+      message: "El estado debe ser: Activo, Descontinuado o Proximamente"
+
+  row_validation:
+    validation_expression: "((df['precio_lista'] > 0) & (df['estado'].isin(['Activo', 'Descontinuado', 'Proximamente']))).all()"
+    description: "Validar que los precios sean positivos y los estados válidos"
+    severity: "ERROR"
+    message: "Se encontraron registros con precios negativos o estados inválidos"
+
+  catalog_validation:
+    validation_expression: "bool(df.shape[0] > 0 and df['codigo_producto'].nunique() == df.shape[0])"
+    description: "Verificar que haya registros y no haya duplicados"
+    severity: "ERROR"
+    message: "El catálogo está vacío o contiene códigos de producto duplicados"

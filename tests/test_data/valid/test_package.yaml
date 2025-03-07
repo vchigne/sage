@@ -1,0 +1,45 @@
+package:
+  name: "Reporte Diario"
+  description: "Paquete con datos diarios de ventas, productos, clientes, vendedores e inventario"
+  mandatory: true
+
+  methods:
+    file_format:
+      type: "ZIP"
+      filename_pattern: "{sender_id}-{date}-PAQUETE_MIXTO.zip"
+
+  catalogs:
+    - name: "Productos"
+      path: "productos.yaml"
+      validation_rules:
+        - name: "Verificar código único"
+          validation_expression: "~df['codigo_producto'].duplicated(keep=False)"  # Series con False para todos los duplicados
+          message: "El código de producto debe ser único"
+          severity: "ERROR"
+        - name: "Verificar nombre requerido"
+          validation_expression: "df['nombre_producto'].notna()"  # Series con False para nulos
+          message: "El nombre del producto es requerido"
+          severity: "ERROR"
+        - name: "Verificar precios positivos"
+          validation_expression: "df['precio_lista'] > 0"  # Series con False para precios no positivos
+          message: "El precio debe ser mayor a 0"
+          severity: "ERROR"
+        - name: "Verificar estado válido"
+          validation_expression: "df['estado'].isin(['Activo', 'Descontinuado', 'Proximamente'])"  # Series con False para estados inválidos
+          message: "Estado inválido"
+          severity: "WARNING"
+    - name: "Ventas"
+      path: "ventas.yaml"
+      validation_rules:
+        - name: "Verificar montos positivos"
+          validation_expression: "df['monto_total'] > 0"  # Series con False para montos no positivos
+          message: "El monto total debe ser mayor a 0"
+          severity: "ERROR"
+
+  destination:
+    enabled: true
+    database_connection:
+      type: "postgresql"
+      environment: "test"
+    target_table: "ventas_consolidadas"
+    insertion_method: "insert"

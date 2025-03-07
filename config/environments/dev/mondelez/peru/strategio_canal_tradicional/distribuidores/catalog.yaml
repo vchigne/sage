@@ -1,0 +1,37 @@
+catalog:
+  name: "Ventas Distribuidores"
+  description: "Registro de ventas de distribuidores del canal tradicional"
+  fields:
+    - name: "distributor_id"
+      type: "text"
+      length: 10
+      required: true
+      validation_expression: "df['distributor_id'].notnull()"
+    - name: "sale_date"
+      type: "date"
+      required: true
+      validation_expression: "df['sale_date'] <= pd.Timestamp.today()"
+    - name: "product_code"
+      type: "text"
+      length: 15
+      required: true
+    - name: "quantity"
+      type: "number"
+      length: 10
+      decimals: 2
+      required: true
+      validation_expression: "df['quantity'] > 0"
+    - name: "unit_price"
+      type: "number"
+      length: 10
+      decimals: 2
+      required: true
+      validation_expression: "df['unit_price'] > 0"
+  row_validation:
+    validation_expression: "df['quantity'] * df['unit_price'] > 0"
+    description: "El monto total de venta debe ser mayor a 0"
+  catalog_validation:
+    validation_expression: "df.groupby('distributor_id').size().min() > 0"
+    description: "Cada distribuidor debe tener al menos una venta"
+  file_format:
+    filename_pattern: "{distributor_id}-{date}-SALES.csv"

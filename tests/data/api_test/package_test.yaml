@@ -1,0 +1,17 @@
+package:
+  name: "Paquete de Prueba API"
+  description: "Paquete de prueba para validación de ventas"
+  version: "1.0"
+
+  methods:
+    file_format:
+      type: "CSV"
+      filename_pattern: "{sender_id}-{date}-VENTAS.csv"
+
+  catalogs:
+    - path: "catalogs/ventas_test.yaml"
+
+  validation_rules:
+    - name: "validar_montos"
+      description: "Validar que los montos sean positivos"
+      validation_expression: "df['monto'] > 0"

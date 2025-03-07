@@ -1,0 +1,33 @@
+catalog:
+  name: "Ventas Test"
+  description: "Catálogo de prueba para API de ventas"
+  fields:
+    - name: "venta_id"
+      type: "text"
+      length: 20
+      required: true
+      unique: true
+      validation_expression: "df['venta_id'].notnull()"
+
+    - name: "fecha"
+      type: "date"
+      required: true
+      validation_expression: "pd.to_datetime(df['fecha']) <= pd.Timestamp.today()"
+
+    - name: "monto"
+      type: "number"
+      length: 10
+      decimals: 2
+      required: true
+      validation_expression: "df['monto'] > 0"
+
+  row_validation:
+    validation_expression: "(df['monto'] > 0)"
+    description: "Validar que los montos sean positivos"
+
+  catalog_validation:
+    validation_expression: "(df.shape[0] > 0) and (df['venta_id'].nunique() == df.shape[0])"
+    description: "Verificar que haya registros y no haya duplicados"
+
+  file_format:
+    filename_pattern: "{sender_id}-{date}-VENTAS.csv"

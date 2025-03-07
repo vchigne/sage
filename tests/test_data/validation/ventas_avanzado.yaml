@@ -1,0 +1,58 @@
+catalog:
+  name: "Catálogo de Ventas - Validación Avanzada"
+  fields:
+    - name: "codigo_venta"
+      validation_expression: "~df['codigo_venta'].duplicated(keep=False)"
+      message: "El código de venta debe ser único"
+      severity: "ERROR"
+
+    - name: "codigo_venta"
+      validation_expression: "df['codigo_venta'].str.match(r'^VTA[0-9]{6}$')"
+      message: "El código debe tener el formato VTAXXXXXX (donde X son números)"
+      severity: "ERROR"
+
+    - name: "fecha_venta"
+      validation_expression: "pd.to_datetime(df['fecha_venta'], errors='coerce').notna()"
+      message: "Formato de fecha inválido"
+      severity: "ERROR"
+
+    - name: "fecha_venta"
+      validation_expression: "pd.to_datetime(df['fecha_venta']) <= pd.Timestamp('2025-12-31')"
+      message: "La fecha de venta no puede ser futura"
+      severity: "ERROR"
+
+    - name: "cantidad"
+      validation_expression: "df['cantidad'] > 0"
+      message: "La cantidad debe ser mayor a 0"
+      severity: "ERROR"
+
+    - name: "cantidad"
+      validation_expression: "df['cantidad'] <= 1000"
+      message: "La cantidad no puede exceder 1000 unidades"
+      severity: "WARNING"
+
+    - name: "precio_unitario"
+      validation_expression: "df['precio_unitario'] > 0"
+      message: "El precio unitario debe ser mayor a 0"
+      severity: "ERROR"
+
+    - name: "total"
+      validation_expression: "df['total'] == (df['cantidad'] * df['precio_unitario'])"
+      message: "El total no coincide con cantidad * precio unitario"
+      severity: "ERROR"
+
+    - name: "descuento"
+      validation_expression: "(df['descuento'] >= 0) & (df['descuento'] <= df['total'])"
+      message: "El descuento debe estar entre 0 y el total"
+      severity: "ERROR"
+
+    # Validaciones combinadas - usando negación para detectar casos inválidos
+    - name: "descuento"
+      validation_expression: "~((df['descuento'] / df['total'] > 0.50) & (df['cantidad'] < 100))"
+      message: "Descuentos mayores al 50% solo permitidos en pedidos de 100+ unidades"
+      severity: "WARNING"
+
+    - name: "total"
+      validation_expression: "~((df['total'] > 10000) & (df['forma_pago'] != 'Transferencia'))"
+      message: "Ventas mayores a 10000 solo permitidas con transferencia"
+      severity: "ERROR"

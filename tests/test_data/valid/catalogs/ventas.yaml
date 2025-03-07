@@ -1,0 +1,64 @@
+catalog:
+  name: "Ventas Diarias"
+  description: "Registro de transacciones de venta"
+  fields:
+    - name: "venta_id"
+      type: "text"
+      length: 20
+      required: true
+      unique: true
+      validation_expression: "df['venta_id'].notnull()"
+
+    - name: "fecha"
+      type: "date"
+      required: true
+      validation_expression: "pd.to_datetime(df['fecha']) <= pd.Timestamp.today()"
+
+    - name: "cliente_id"
+      type: "text"
+      length: 10
+      required: true
+      validation_expression: "df['cliente_id'].notnull()"
+
+    - name: "vendedor_id"
+      type: "text"
+      length: 10
+      required: true
+      validation_expression: "df['vendedor_id'].notnull()"
+
+    - name: "producto_id"
+      type: "text"
+      length: 15
+      required: true
+      validation_expression: "df['producto_id'].notnull()"
+
+    - name: "cantidad"
+      type: "number"
+      length: 5
+      required: true
+      validation_expression: "df['cantidad'] > 0"
+
+    - name: "precio_unitario"
+      type: "number"
+      length: 10
+      decimals: 2
+      required: true
+      validation_expression: "df['precio_unitario'] > 0"
+
+    - name: "monto_total"
+      type: "number"
+      length: 12
+      decimals: 2
+      required: true
+      validation_expression: "abs(df['monto_total'] - (df['cantidad'] * df['precio_unitario'])) < 0.01"
+
+  row_validation:
+    validation_expression: "(df['monto_total'] > 0) & (df['cantidad'] > 0)"
+    description: "Validar que los montos y cantidades sean positivos"
+
+  catalog_validation:
+    validation_expression: "(df.shape[0] > 0) and (df['venta_id'].nunique() == df.shape[0])"
+    description: "Verificar que haya registros y no haya duplicados"
+
+  file_format:
+    filename_pattern: "{sender_id}-{date}-VENTAS.csv"

@@ -1,0 +1,35 @@
+package:
+  name: "Paquete de Ventas Distribuidores"
+  description: "Datos de ventas enviados por distribuidores del canal tradicional"
+  mandatory: true
+
+  methods:
+    file_format:
+      type: "CSV"
+      filename_pattern: "{sender_id}-{date}-SALES_PACKAGE.csv"
+
+  catalogs:
+    - path: "catalog.yaml"
+
+  package_validation:
+    validation_rules:
+      - name: "Distribuidor debe estar registrado"
+        validation_expression: "df['distributor_id'].isin(registered_distributors)"
+      - name: "Ventas dentro del mes actual"
+        validation_expression: "df['sale_date'].dt.month == pd.Timestamp.today().month"
+
+  destination:
+    enabled: true
+    database_connection:
+      type: "postgresql"
+      environment: "dev"  # Esto se usará para obtener las credenciales del archivo de secrets
+    target_table: "distributor_sales"
+    
+    pre_validation:
+      endpoint: "https://api-dev.mondelez.com/validate_sales"
+      method: "POST"
+      payload:
+        table: "temp_sales"
+        checks: ["validate_distributors", "check_duplicates"]
+    
+    insertion_method: "insert"

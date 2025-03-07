@@ -1,0 +1,81 @@
+package:
+  name: "Test Package"
+  description: "Test package with multiple CSV files"
+  methods:
+    file_format:
+      type: "ZIP"
+
+  components:
+    - nombre_logico: "ventas"
+      archivo: "sales.csv"
+      catalogo: "ventas"
+      format: "csv"
+      encoding: "utf-8"
+      separator: ","
+      fields:
+        - name: "transaction_id"
+          type: "text"
+          required: true
+          unique: true
+          validation_expression: "df['transaction_id'].notnull()"
+        - name: "customer_id"
+          type: "text"
+          required: true
+          validation_expression: "df['customer_id'].notnull()"
+        - name: "amount"
+          type: "number"
+          required: true
+          validation_expression: "df['amount'] > 0"
+        - name: "date"
+          type: "date"
+          required: true
+          validation_expression: "pd.to_datetime(df['date'], errors='coerce').notnull().all()"
+      row_validation:
+        validation_expression: "df['amount'] <= 10000"
+        description: "Individual transaction amount must not exceed 10000"
+      catalog_validation:
+        validation_expression: "df.shape[0] >= 1 & df.duplicated(subset=['transaction_id']).sum() == 0"
+        description: "Must have at least one record and no duplicate transactions"
+
+    - nombre_logico: "clientes"
+      archivo: "customers.csv"
+      catalogo: "clientes"
+      format: "csv"
+      encoding: "utf-8"
+      separator: ","
+      fields:
+        - name: "customer_id"
+          type: "text"
+          required: true
+          unique: true
+          validation_expression: "df['customer_id'].notnull()"
+        - name: "name"
+          type: "text"
+          required: true
+          validation_expression: "df['name'].notnull()"
+        - name: "email"
+          type: "text"
+          required: true
+          validation_expression: "df['email'].str.contains('@').all()"
+      catalog_validation:
+        validation_expression: "df.duplicated(subset=['customer_id']).sum() == 0"
+        description: "No duplicate customer IDs allowed"
+
+  package_validation:
+    validation_rules:
+      - name: "Customer exists in customers catalog"
+        validation_expression: "df['ventas']['customer_id'].isin(df['clientes']['customer_id'])"
+      - name: "Sales amount is positive"
+        validation_expression: "df['ventas']['amount'] > 0"
+
+  destination:
+    enabled: true
+    database_connection:
+      type: "postgresql"
+      host: "${PGHOST}"
+      port: "${PGPORT}"
+      username: "${PGUSER}"
+      password: "${PGPASSWORD}"
+      database: "${PGDATABASE}"
+    target_table: "processed_sales"
+    insertion_method: "insert"

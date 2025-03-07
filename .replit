@@ -1,0 +1,78 @@
+modules = ["python-3.11", "nodejs-20", "postgresql-16", "python3"]
+
+[nix]
+channel = "stable-24_05"
+
+[workflows]
+runButton = "Project"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "SAGE Validator"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Next.js Dev Server"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "SAGE API Server"
+
+[[workflows.workflow]]
+name = "SAGE Validator"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python -m pytest tests/test_validation_cases.py -v --log-cli-level=DEBUG"
+
+[[workflows.workflow]]
+name = "Next.js Dev Server"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npx next dev -p 5001 -H 0.0.0.0"
+waitForPort = 5001
+
+[[workflows.workflow]]
+name = "SAGE API Server"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python -m sage.api.run"
+
+[deployment]
+run = ["sh", "-c", "python -m pytest tests/test_validation_cases.py -v --log-cli-level=DEBUG"]
+
+[[ports]]
+localPort = 5000
+externalPort = 80
+
+[[ports]]
+localPort = 5001
+externalPort = 3000

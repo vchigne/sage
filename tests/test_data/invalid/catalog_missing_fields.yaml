@@ -1,0 +1,11 @@
+catalog:
+  name: "Catálogo Inválido - Campos Faltantes"
+  description: "Catálogo con campos requeridos faltantes"
+  # Missing required 'fields' section
+  
+  row_validation:
+    validation_expression: "df['price'] > 0"
+    description: "Validación básica de precio"
+
+  file_format:
+    filename_pattern: "invalid.csv"

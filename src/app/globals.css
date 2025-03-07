@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-rgb: 243, 244, 246;
+}
+
+.sidebar-link {
+  @apply flex items-center px-6 py-2.5 text-gray-600 hover:bg-gray-50 hover:text-blue-600 transition-colors;
+}
+
+.metric-card {
+  @apply bg-white rounded-lg shadow-sm p-6;
+}
+
+.metric-title {
+  @apply text-sm font-medium text-gray-600;
+}
+
+.metric-value {
+  @apply text-3xl font-bold text-gray-900 mt-2;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: rgb(var(--background-rgb));
+}

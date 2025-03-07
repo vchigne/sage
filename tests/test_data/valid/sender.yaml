@@ -1,0 +1,39 @@
+senders:
+  corporate_owner: "Test Corp"
+  data_receivers:
+    - name: "Data Hub"
+      email: "datahub@test.com"
+      sftp_directory: "/incoming/test/"
+      api_endpoint: "https://api.test.com/upload"
+
+  senders_list:
+    - sender_id: "TEST001"
+      name: "Test Distributor"
+      responsible_person:
+        name: "John Doe"
+        email: "john.doe@test.com"
+        phone: "+1-555-0123"
+
+      submission_frequency:
+        type: "daily"
+        deadline:
+          if_daily:
+            time: "23:59"
+
+      allowed_methods: ["sftp", "api"]
+
+      configurations:
+        sftp:
+          host: "sftp.test.com"
+          port: 22
+          username: "test_user"
+          password: "test_password"
+          directory: "/outgoing/sales/"
+        api:
+          endpoint: "https://api.test.com/upload"
+          api_key: "test_api_key"
+          method: "POST"
+
+      packages:
+        - name: "Ventas Diarias"
+          path: "package.yaml"

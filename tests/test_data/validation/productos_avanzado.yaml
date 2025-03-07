@@ -1,0 +1,58 @@
+catalog:
+  name: "Catálogo de Productos - Validación Avanzada"
+  fields:
+    - name: "codigo_producto"
+      validation_expression: "~df['codigo_producto'].duplicated(keep=False)"
+      message: "El código de producto debe ser único"
+      severity: "ERROR"
+
+    - name: "codigo_producto"
+      validation_expression: "df['codigo_producto'].str.match(r'^PROD[0-9]{4}$')"
+      message: "El código debe tener el formato PRODXXXX (donde X son números)"
+      severity: "ERROR"
+
+    - name: "nombre_producto"
+      validation_expression: "df['nombre_producto'].notna()"
+      message: "El nombre del producto es obligatorio"
+      severity: "ERROR"
+
+    - name: "nombre_producto"
+      validation_expression: "df['nombre_producto'].str.match(r'^[A-Za-z0-9 ]{3,50}$')"
+      message: "El nombre solo puede contener letras, números y espacios (3-50 caracteres)"
+      severity: "WARNING"
+
+    - name: "precio_lista"
+      validation_expression: "df['precio_lista'] > 0"
+      message: "El precio debe ser mayor a 0"
+      severity: "ERROR"
+
+    - name: "precio_lista"
+      validation_expression: "df['precio_lista'] <= 9999999.99"
+      message: "El precio no puede exceder 9,999,999.99"
+      severity: "ERROR"
+
+    - name: "estado"
+      validation_expression: "df['estado'].isin(['Activo', 'Descontinuado', 'Proximamente'])"
+      message: "Estado inválido"
+      severity: "ERROR"
+
+    - name: "categoria"
+      validation_expression: "df['categoria'].isin(['Alimentos', 'Bebidas', 'Limpieza', 'Cuidado Personal'])"
+      message: "Categoría inválida"
+      severity: "ERROR"
+
+    - name: "fecha_creacion"
+      validation_expression: "pd.to_datetime(df['fecha_creacion'], errors='coerce').notna()"
+      message: "Formato de fecha inválido"
+      severity: "ERROR"
+
+    # Validaciones combinadas - usando negación para detectar casos inválidos
+    - name: "precio_lista"
+      validation_expression: "~((df['precio_lista'] >= 100) & ~df['categoria'].isin(['Limpieza']))"
+      message: "Productos con precio >= 100 solo permitidos en categoría Limpieza"
+      severity: "WARNING"
+
+    - name: "estado"
+      validation_expression: "~((df['estado'] == 'Descontinuado') & (df['precio_lista'] > 500))"
+      message: "Productos descontinuados no pueden tener precio mayor a 500"
+      severity: "WARNING"

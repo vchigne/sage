@@ -1,0 +1,39 @@
+senders:
+  corporate_owner: "Alicorp Perú"
+  data_receivers:
+    - name: "Centro de Datos Alicorp"
+      email: "datahub.peru@alicorp-dev.com"
+      sftp_directory: "/alicorp/peru/maestros/"
+      api_endpoint: "https://api-dev.alicorp.com/peru/upload"
+
+  senders_list:
+    - sender_id: "ALC001"
+      name: "Alicorp Sede Central"
+      responsible_person:
+        name: "Maria Rodriguez"
+        email: "mrodriguez@alicorp-dev.com"
+        phone: "+51-999-123-456"
+
+      submission_frequency:
+        type: "daily"
+        deadline:
+          if_daily:
+            time: "23:59"
+
+      allowed_methods: ["sftp", "api"]
+
+      configurations:
+        sftp:
+          host: "sftp-dev.alicorp.com"
+          port: 22
+          username: "alc_sftp"
+          password: "dev_sftp_pass"
+          directory: "/maestros/productos/"
+        api:
+          endpoint: "https://api-dev.alicorp.com/peru/maestros/productos/upload"
+          api_key: "test_api_key_alc001"
+          method: "POST"
+
+      packages:
+        - name: "Maestro de Productos Oficial"
+          path: "package_productos.yaml"

@@ -1,0 +1,35 @@
+package:
+  name: "Paquete de Ventas"
+  description: "Configuración para procesamiento de datos de ventas"
+  mandatory: true
+
+  methods:
+    file_format:
+      type: "CSV"
+      filename_pattern: "{sender_id}-{date}-SALES.csv"
+
+  catalogs:
+    - path: "catalog.yaml"
+
+  package_validation:
+    validation_rules:
+      - name: "Verificar total de ventas"
+        validation_expression: "df['total_amount'].sum() > 0"
+      - name: "Verificar fechas válidas"
+        validation_expression: "df['sale_date'] <= pd.Timestamp.today()"
+
+  destination:
+    enabled: true
+    database_connection:
+      type: "postgresql"
+      environment: "dev"
+    target_table: "sales_data"
+    
+    pre_validation:
+      endpoint: "https://api-dev.example.com/validate"
+      method: "POST"
+      payload:
+        table: "temp_sales"
+        checks: ["validate_totals", "check_duplicates"]
+    
+    insertion_method: "insert"

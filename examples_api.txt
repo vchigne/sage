@@ -1,0 +1,116 @@
+# Ejemplos de uso de la API SAGE
+
+## 1. Validar un archivo YAML de catálogo
+
+```bash
+# Validar configuración de catálogo
+curl -X POST http://localhost:5000/api/validate-yaml \
+  -F "file=@data/yaml/catalog/productos.yaml" \
+  -F "schema_type=catalog"
+
+# Respuesta exitosa:
+{
+  "status": "success",
+  "validations": []
+}
+
+# Respuesta con errores/warnings:
+{
+  "status": "warning",
+  "validations": [
+    {
+      "severity": "ERROR",
+      "message": "El código de producto es obligatorio",
+      "field": "codigo_producto",
+      "line": 2,
+      "value": null
+    },
+    {
+      "severity": "WARNING", 
+      "message": "El estado debe ser: Activo, Descontinuado o Proximamente",
+      "field": "estado",
+      "line": 5,
+      "value": "Inactivo"
+    }
+  ]
+}
+```
+
+## 2. Procesar un paquete ZIP
+
+```bash
+# Procesar paquete ZIP completo
+curl -X POST http://localhost:5000/api/process-package \
+  -F "file=@data/files/zip/ALC001-20250306-PAQUETE_SIMPLE.zip" \
+  -F "catalog_yaml=@data/yaml/catalog/productos.yaml"
+
+# Respuesta exitosa:
+{
+  "status": "success",
+  "validations": []
+}
+
+# Respuesta con errores:
+{
+  "status": "error",
+  "validations": [
+    {
+      "severity": "ERROR",
+      "message": "No se encontró archivo para el catálogo: Productos",
+      "field": "file_format",
+      "line": null,
+      "value": null
+    }
+  ]
+}
+```
+
+## 3. Validar configuración de emisor
+
+```bash
+# Validar permisos y configuración de emisor
+curl -X POST http://localhost:5000/api/validate-sender \
+  -F "file=@data/yaml/sender/sender.yaml" \
+  -F "package_name=Reporte Diario"
+
+# Respuesta exitosa:
+{
+  "status": "success",
+  "validations": []
+}
+
+# Respuesta con error:
+{
+  "status": "error",
+  "validations": [
+    {
+      "severity": "ERROR",
+      "message": "Paquete no autorizado: Reporte Diario",
+      "field": "authorization",
+      "line": null,
+      "value": null
+    }
+  ]
+}
+```
+
+## Notas Importantes
+
+1. Niveles de Severidad:
+   - ERROR: Errores críticos que impiden el procesamiento
+   - WARNING: Advertencias que permiten continuar
+   - INFO: Información adicional sobre el proceso
+
+2. Estructura de archivos:
+   - Los YAMLs de configuración van en data/yaml/
+   - Los archivos de datos van en data/files/
+
+3. Nomenclatura:
+   - ZIP: {sender_id}-{date}-PAQUETE_SIMPLE.zip
+   - CSV/Excel: {sender_id}-{date}-{type}.csv
+
+4. Manejo de errores:
+   - Todos los endpoints retornan JSON
+   - Status puede ser "success", "warning" o "error"
+   - Lista de validaciones incluye severidad y mensajes detallados
+   - Los mensajes incluyen número de línea y valor cuando es posible

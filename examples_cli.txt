@@ -1,0 +1,74 @@
+# Ejemplos de uso del CLI SAGE
+
+## 1. Validar un archivo YAML de catálogo
+
+```bash
+# Validar configuración de catálogo
+python -m sage.cli.main validate-yaml \
+  data/yaml/catalog/productos.yaml catalog
+
+# Salida exitosa:
+✅ YAML validation successful
+
+# Salida con errores/warnings:
+❌ Validation results:
+  ERROR - código_producto (línea 2): El código de producto es obligatorio
+    Valor: null
+
+  ⚠️  WARNING - estado (línea 5): El estado debe ser: Activo, Descontinuado o Proximamente
+    Valor: "Inactivo"
+```
+
+## 2. Procesar un paquete ZIP
+
+```bash
+# Procesar paquete ZIP completo
+python -m sage.cli.main process-package \
+  data/files/zip/ALC001-20250306-PAQUETE_SIMPLE.zip \
+  data/yaml/catalog/productos.yaml
+
+# Salida exitosa:
+✅ Package processed successfully
+
+# Salida con errores:
+❌ Processing results:
+  ERROR - file_format: No se encontró archivo para el catálogo: Productos
+```
+
+## 3. Validar configuración de emisor
+
+```bash
+# Validar permisos y configuración de emisor
+python -m sage.cli.main validate-sender \
+  data/yaml/sender/sender.yaml \
+  "Reporte Diario"
+
+# Salida exitosa:
+✅ Sender validation successful
+
+# Salida con error:
+❌ Validation results:
+  ERROR - authorization: Paquete no autorizado: Reporte Diario
+```
+
+## Notas Importantes
+
+1. Severidad de validaciones:
+   - ❌ ERROR: Errores críticos que impiden continuar
+   - ⚠️ WARNING: Advertencias que permiten continuar
+   - ℹ️ INFO: Información adicional del proceso
+
+2. Estructura de comandos:
+   - validate-yaml: Valida estructura YAML
+   - process-package: Procesa ZIP completo
+   - validate-sender: Valida emisor
+
+3. Ubicación de archivos:
+   - YAMLs: data/yaml/{catalog|package|sender}/
+   - Datos: data/files/{excel|csv|zip}/
+
+4. Depuración y logs:
+   - Los comandos muestran logs detallados
+   - Incluyen severidad, campo, línea y valor
+   - Usan emojis para mejor visualización
+   - Códigos de salida: 0 éxito, 1 error

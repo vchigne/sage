@@ -1,0 +1,22 @@
+catalog:
+  name: "Catálogo Inválido - Validaciones"
+  description: "Catálogo con expresiones de validación inválidas"
+  fields:
+    - name: "id"
+      type: "text"
+      length: 10
+      required: true
+      validation_expression: 123  # Debe ser string
+
+    - name: "price"
+      type: "number"
+      validation_expression: []  # Debe ser string
+      required: true
+
+  row_validation:
+    validation_expression: {}  # Debe ser string
+    description: "Validación inválida"
+
+  catalog_validation:
+    # Falta validation_expression
+    description: "Validación global sin expresión"

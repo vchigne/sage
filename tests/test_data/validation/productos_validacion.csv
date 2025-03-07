@@ -1,0 +1,8 @@
+codigo_producto,nombre_producto,precio_lista,estado,categoria,stock,fecha_creacion
+PROD001,Producto 1,100.50,Activo,Alimentos,50,2025-03-06
+PROD001,Producto duplicado,-25.00,,Bebidas,-10,2025-03-06
+PROD003,,0.00,Estado Inválido,Limpieza,100,fecha_invalida
+PROD004,Producto 4,1500.75,Descontinuado,Categoría Inválida,0,2025-03-06
+,Producto sin código,50.25,Proximamente,Alimentos,25,2025-03-06
+PROD006,Producto !@#$,9999999.99,Activo,Bebidas,999999,2025-13-32
+PROD007,Producto N°1,0.01,Proximamente,Limpieza,-1,2024-02-29

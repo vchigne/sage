@@ -1,0 +1,42 @@
+catalog:
+  name: "Catálogo de Productos para Validación"
+  fields:
+    - name: "codigo_producto"
+      validation_expression: "~df['codigo_producto'].duplicated(keep=False)"  # Series con False para duplicados
+      message: "El código de producto debe ser único"
+      severity: "ERROR"
+    
+    - name: "codigo_producto"
+      validation_expression: "df['codigo_producto'].notna()"  # Series con False para nulos
+      message: "El código de producto es obligatorio"
+      severity: "ERROR"
+
+    - name: "nombre_producto"
+      validation_expression: "df['nombre_producto'].notna()"  # Series con False para nulos
+      message: "El nombre del producto es obligatorio"
+      severity: "ERROR"
+
+    - name: "precio_lista"
+      validation_expression: "df['precio_lista'] > 0"  # Series con False para precios no positivos
+      message: "El precio debe ser mayor a 0"
+      severity: "ERROR"
+
+    - name: "estado"
+      validation_expression: "df['estado'].isin(['Activo', 'Descontinuado', 'Proximamente'])"  # Series con False para estados inválidos
+      message: "Estado inválido"
+      severity: "WARNING"
+
+    - name: "categoria"
+      validation_expression: "df['categoria'].isin(['Alimentos', 'Bebidas', 'Limpieza'])"  # Series con False para categorías inválidas
+      message: "Categoría inválida"
+      severity: "WARNING"
+
+    - name: "stock"
+      validation_expression: "df['stock'] >= 0"  # Series con False para stock negativo
+      message: "El stock no puede ser negativo"
+      severity: "ERROR"
+
+    - name: "fecha_creacion"
+      validation_expression: "pd.to_datetime(df['fecha_creacion'], errors='coerce').notna()"  # Series con False para fechas inválidas
+      message: "Formato de fecha inválido"
+      severity: "ERROR"

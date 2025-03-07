@@ -1,0 +1,22 @@
+package:
+  name: "Paquete Inválido - Destino"
+  description: "Paquete con configuración de destino inválida"
+  mandatory: true
+
+  methods:
+    file_format:
+      type: "PDF"  # Tipo no permitido
+      filename_pattern: "{date}.pdf"
+
+  catalogs:
+    - path: "catalog.yaml"
+
+  destination:
+    enabled: "yes"  # Debe ser booleano
+    database_connection:
+      type: "mongodb"  # Tipo no soportado
+      host: 123  # Debe ser string
+      port: "5432"  # Debe ser número
+    target_table: []  # Debe ser string
+    
+    insertion_method: "invalid"  # Método no válido

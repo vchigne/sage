@@ -1,0 +1,28 @@
+senders:
+  corporate_owner: "Test Corp"
+  data_receivers:
+    - name: "Data Hub"
+      email: "invalid.email"  # Email inválido
+      sftp_directory: 123  # Debe ser string
+
+  senders_list:
+    - sender_id: "TEST001"
+      name: "Test Sender"
+      responsible_person:
+        name: "John Doe"
+        email: "not_an_email"  # Email inválido
+        phone: 12345  # Debe ser string
+
+      allowed_methods: ["ftp", "scp", "invalid"]  # Métodos no permitidos
+
+      configurations:
+        sftp:
+          host: []  # Debe ser string
+          port: "22"  # Debe ser número
+          username: 123  # Debe ser string
+          password: {}  # Debe ser string
+          directory: null  # Debe ser string
+
+      packages:
+        - name: "Invalid Package"
+          path: 123  # Debe ser string

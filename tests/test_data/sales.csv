@@ -1,0 +1,3 @@
+venta_id,fecha,cliente_id,vendedor_id,producto_id,cantidad,precio_unitario,monto_total
+TEST001,2025-03-05,CLI001,VEND001,PROD001,10,15.50,155.00
+TEST002,2025-03-05,CLI002,VEND002,PROD002,5,20.00,100.00

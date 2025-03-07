@@ -1,0 +1,16 @@
+package:
+  name: "Paquete Inválido"
+  description: "Paquete con configuración inválida"
+  mandatory: "yes"  # Should be boolean
+
+  methods:
+    file_format:
+      type: "PDF"  # Invalid file type
+      filename_pattern: 123  # Should be string
+
+  # Missing required catalogs section
+
+  package_validation:
+    validation_rules:
+      - name: "Regla sin expresión"
+        # Missing validation_expression

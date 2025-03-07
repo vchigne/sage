@@ -1,0 +1,14 @@
+codigo_producto,nombre_producto,precio_lista,estado,categoria,fecha_creacion
+PROD0001,Producto Normal,99.99,Activo,Alimentos,2025-03-06
+PROD0001,Producto Duplicado,150.00,Activo,Bebidas,2025-03-06
+PRD002,Producto Código Inválido,50.00,Activo,Limpieza,2025-03-06
+PROD0003,Producto con @#$%,75.50,Activo,Cuidado Personal,2025-03-06
+PROD0004,,200.00,Activo,Alimentos,2025-03-06
+PROD0005,Producto Precio Negativo,-25.00,Activo,Bebidas,2025-03-06
+PROD0006,Producto Precio Excesivo,10000000.00,Activo,Limpieza,2025-03-06
+PROD0007,Producto Estado Inválido,45.75,En Stock,Cuidado Personal,2025-03-06
+PROD0008,Producto Categoría Inválida,60.25,Activo,Electrónicos,2025-03-06
+PROD0009,Producto Fecha Inválida,85.00,Activo,Alimentos,2025-13-32
+PROD0010,Producto Fecha Futura,95.50,Activo,Bebidas,2026-01-01
+PROD0011,Producto Barato No Limpieza,150.00,Activo,Alimentos,2025-03-06
+PROD0012,Producto Descontinuado Caro,750.00,Descontinuado,Limpieza,2025-03-06
