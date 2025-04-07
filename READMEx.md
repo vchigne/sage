@@ -1,2 +1,0 @@
-# sage
-Sage internal tool
